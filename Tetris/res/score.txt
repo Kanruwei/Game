@@ -1,0 +1,3 @@
+Mike,100
+Hynjin,120
+Ruwei,150
