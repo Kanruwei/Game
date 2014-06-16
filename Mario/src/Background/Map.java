@@ -13,9 +13,13 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 import Frame.GamePanel;
+import Sprites.Sprite;
 
 
 public class Map {
+	
+	public MapManager remote;
+	public Sprite hero;
 	
 	//path of image and text file.
 	public String path_image = null;
@@ -35,7 +39,7 @@ public class Map {
 	public int dy = HEIGHT / 4;
 	
 	public Image brick;
-	public Image hero;
+	public Image hero_image;
 	
 	//location of sprite
 	public int bornX = 5 * 32;
@@ -51,7 +55,14 @@ public class Map {
 	public Graphics g_origin;
 	public Graphics g_originMix;
 	
-	public void init(){
+	public Map(MapManager mm){
+		
+		remote = mm;
+	}
+	
+	public void init(Sprite hero){
+		
+		this.hero = hero;
 		
 		Image image = null;
 		
@@ -103,6 +114,11 @@ public class Map {
 		//create map, which will be rendered on the screen.
 		map = new BufferedImage(WIDTH_MAP, HEIGHT_MAP, BufferedImage.TYPE_INT_RGB);
 	}
+
+	public void keyPressed(int key){
+		
+		hero.keyPressed(key);
+	}
 	
 	public void update(){
 		
@@ -110,11 +126,13 @@ public class Map {
 	
 	public void draw(Graphics g){
 		
+		System.out.println("map draw>>");
+		
 		//draw origin
 		g_originMix.drawImage(origin, 0, 0, null);
 		
 		//draw hero
-		g_originMix.drawImage(hero, realX, realY, null);
+		g_originMix.drawImage(hero_image, realX, realY, null);
 		
 		//define dx.
 		if(realX < WIDTH / 4){

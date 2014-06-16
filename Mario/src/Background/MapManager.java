@@ -2,26 +2,54 @@ package Background;
 
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 import Sprites.Sprite;
 
 public class MapManager {
+	
+	public ArrayList<Map> mapList = new ArrayList<Map>();
+	public int index = 0;
+	public boolean trigger = false;
 	
 	public Map currentMap;
 	public Sprite hero;
 	
 	public MapManager(){
 		
-		currentMap = new Stage_1();
-		currentMap.init();
+		mapList.add(new StartMenu(this));
+		mapList.add(new Stage_1(this));
+		mapList.add(new EndMenu(this));
 		
-		hero = new Sprite(currentMap);
+		currentMap = mapList.get(index);
+	}
+	
+	public void changeStage(){
+		
+		trigger = true;
+		index++;
 	}
 	
 	public void update(){
 		
-		currentMap.update();
-		hero.update();
+		if(index != 0){
+			
+			if(trigger){
+				if(index < mapList.size()){
+					
+					currentMap = mapList.get(index);
+					
+					hero = new Sprite(currentMap);
+					currentMap.init(hero);
+					
+					trigger = false;
+					System.out.println("inti stage_1");
+				}
+			}
+			
+			currentMap.update();
+			hero.update();
+		}
 	}
 	
 	public void draw(Graphics g){
@@ -33,11 +61,8 @@ public class MapManager {
 		
 		int key = e.getKeyCode();
 		
-		if(key == KeyEvent.VK_A){
-			hero.toLeft();
-		}else if(key == KeyEvent.VK_D){
-			hero.toRight();
-		}
+		currentMap.keyPressed(key);
+		
 	}
 
 	public void keyReleased(KeyEvent arg0) {
