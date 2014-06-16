@@ -58,11 +58,9 @@ public class Sprite {
 				if(matrix.get(realY / 32)[TempX / 32].equals("1")){
 
 					realX = realX / 32 * 32;
-//					System.out.println("TempX: " + TempX + " realX: " + realX);
 				}else{
 					
 					realX = TempX;
-//					System.out.println("TempX: " + TempX + " realX: " + realX);
 				}
 			}
 		}

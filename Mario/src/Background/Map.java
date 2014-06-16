@@ -28,6 +28,9 @@ public class Map {
 	public int WIDTH = GamePanel.WIDTH * 2;
 	public int HEIGHT = GamePanel.HEIGHT * 2;
 	
+	public int WIDTH_MAP = WIDTH / 2;
+	public int HEIGHT_MAP = HEIGHT / 2;
+	
 	public int dx = 0;
 	public int dy = HEIGHT / 4;
 	
@@ -98,7 +101,7 @@ public class Map {
 		g_originMix = originMix.createGraphics();
 		
 		//create map, which will be rendered on the screen.
-		map = new BufferedImage(WIDTH / 2, HEIGHT / 2, BufferedImage.TYPE_INT_RGB);
+		map = new BufferedImage(WIDTH_MAP, HEIGHT_MAP, BufferedImage.TYPE_INT_RGB);
 	}
 	
 	public void update(){
@@ -114,7 +117,20 @@ public class Map {
 		g_originMix.drawImage(hero, realX, realY, null);
 		
 		//draw map
-		map = originMix.getSubimage(dx, dy, WIDTH / 2, HEIGHT / 2);
+		if(realX < WIDTH / 4){
+			
+			dx = 0;
+			map = originMix.getSubimage(dx, dy, WIDTH_MAP, HEIGHT_MAP);
+		}else if(realX > WIDTH - WIDTH_MAP / 2){
+			
+			dx = WIDTH - WIDTH_MAP;
+			map = originMix.getSubimage(dx, dy, WIDTH_MAP, HEIGHT_MAP);
+		}else{
+			
+			dx = realX - WIDTH_MAP / 2;
+			System.out.println("dx: " + dx + " realX: " + realX + " WIDTH_MAP: " + WIDTH_MAP);
+			map = originMix.getSubimage(dx, dy, WIDTH_MAP, HEIGHT_MAP);
+		}
 		
 		g.drawImage(map, 0, 0, null);
 	}
