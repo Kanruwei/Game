@@ -38,8 +38,8 @@ public class Map {
 	public Image hero;
 	
 	//location of sprite
-	public int bornX = 4 * 32;
-	public int bornY = 23 * 32;
+	public int bornX = 5 * 32;
+	public int bornY = 19 * 32;
 	
 	public int realX = bornX;
 	public int realY = bornY;
@@ -116,21 +116,26 @@ public class Map {
 		//draw hero
 		g_originMix.drawImage(hero, realX, realY, null);
 		
-		//draw map
+		//define dx.
 		if(realX < WIDTH / 4){
-			
 			dx = 0;
-			map = originMix.getSubimage(dx, dy, WIDTH_MAP, HEIGHT_MAP);
 		}else if(realX > WIDTH - WIDTH_MAP / 2){
-			
 			dx = WIDTH - WIDTH_MAP;
-			map = originMix.getSubimage(dx, dy, WIDTH_MAP, HEIGHT_MAP);
 		}else{
-			
 			dx = realX - WIDTH_MAP / 2;
-			System.out.println("dx: " + dx + " realX: " + realX + " WIDTH_MAP: " + WIDTH_MAP);
-			map = originMix.getSubimage(dx, dy, WIDTH_MAP, HEIGHT_MAP);
 		}
+		
+		//define dy.
+		if(realY >= HEIGHT - (32 + (HEIGHT_MAP - 32) / 2)){
+			dy = WIDTH - (HEIGHT_MAP - 32) / 2;
+		}else if(realY <= (HEIGHT_MAP - 32) / 2){
+			dy = 0;
+		}else{
+			dy = realY - 408;
+		}
+		
+		//draw map.
+		map = originMix.getSubimage(dx, dy, WIDTH_MAP, HEIGHT_MAP);
 		
 		g.drawImage(map, 0, 0, null);
 	}
