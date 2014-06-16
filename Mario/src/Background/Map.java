@@ -25,10 +25,6 @@ public class Map {
 	//String[] of Map
 	public ArrayList<String[]> matrix = new ArrayList<String[]>();
 	
-	//location of sprite
-	public int bornX = 2 * 32;
-	public int bornY = 23 * 32;
-	
 	public int WIDTH = GamePanel.WIDTH * 2;
 	public int HEIGHT = GamePanel.HEIGHT * 2;
 	
@@ -36,11 +32,21 @@ public class Map {
 	public int dy = HEIGHT / 4;
 	
 	public Image brick;
+	public Image hero;
+	
+	//location of sprite
+	public int bornX = 4 * 32;
+	public int bornY = 23 * 32;
+	
+	public int realX = bornX;
+	public int realY = bornY;
 	
 	public BufferedImage origin;
+	public BufferedImage originMix;
 	public BufferedImage map;
 	
 	public Graphics g_origin;
+	public Graphics g_originMix;
 	
 	public void init(){
 		
@@ -87,9 +93,12 @@ public class Map {
 			System.out.println("image of Brick, path_txt don't exist. BufferedReader text is null.");
 		}
 		
+		//create origin_hero.
+		originMix = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+		g_originMix = originMix.createGraphics();
+		
 		//create map, which will be rendered on the screen.
 		map = new BufferedImage(WIDTH / 2, HEIGHT / 2, BufferedImage.TYPE_INT_RGB);
-		map = origin.getSubimage(dx, dy, WIDTH / 2, HEIGHT / 2);
 	}
 	
 	public void update(){
@@ -97,6 +106,15 @@ public class Map {
 	}
 	
 	public void draw(Graphics g){
+		
+		//draw origin
+		g_originMix.drawImage(origin, 0, 0, null);
+		
+		//draw hero
+		g_originMix.drawImage(hero, realX, realY, null);
+		
+		//draw map
+		map = originMix.getSubimage(dx, dy, WIDTH / 2, HEIGHT / 2);
 		
 		g.drawImage(map, 0, 0, null);
 	}

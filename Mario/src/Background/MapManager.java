@@ -27,21 +27,17 @@ public class MapManager {
 	public void draw(Graphics g){
 		
 		currentMap.draw(g);
-		hero.draw(g);
 	}
 	
 	public void keyPressed(KeyEvent e) {
 		
 		int key = e.getKeyCode();
-		String direction = null;
 		
 		if(key == KeyEvent.VK_A){
-			direction = "left";
+			hero.toLeft();
 		}else if(key == KeyEvent.VK_D){
-			direction = "right";
+			hero.toRight();
 		}
-		
-		hero.move(direction);
 	}
 
 	public void keyReleased(KeyEvent arg0) {

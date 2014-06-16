@@ -18,8 +18,15 @@ public class Sprite {
 	public int realX;
 	public int realY;
 	
-	public int refX;
-	public int refY;
+	public int TempX;
+	public int TempY;
+	
+	public boolean falling = false;
+	public boolean jumping = false;
+	public boolean moving = false;
+	
+	public int move_speed = 6;
+	public int jump_speed = 4;
 	
 	public int step = 32;
 	
@@ -30,35 +37,66 @@ public class Sprite {
 		
 		this.map = map;
 		this.matrix = map.matrix;
-		realX = map.bornX;
-		realY = map.bornY;
-		refX = realX - map.dx;
-		refY = realY - map.dy;
-		
+		this.realX = map.realX;
+		this.realY = map.realY;
 		
 		try {
 			image = ImageIO.read(new File(path_image));
+			map.hero = image;
 		} catch (IOException e) {
 			System.out.println("the path of image doesn't exist.");
 		}
 	}
 	
-	public void move(String direction){
+	public void toLeft(){
 		
-		if (direction.equals("left")){
-			refX = refX - step;
-		}else if (direction.equals("right")){
-			refX = refX + step;
+		if(!falling){
+			TempX = realX - move_speed;
+
+			if(TempX > 0){
+
+				if(matrix.get(realY / 32)[TempX / 32].equals("1")){
+
+					realX = realX / 32 * 32;
+//					System.out.println("TempX: " + TempX + " realX: " + realX);
+				}else{
+					
+					realX = TempX;
+//					System.out.println("TempX: " + TempX + " realX: " + realX);
+				}
+			}
+		}
+	}
+	
+	public void toRight(){
+		
+		if(!falling){
+			TempX = realX + move_speed;
+
+			if(TempX < map.WIDTH - 32){
+
+				if(matrix.get(realY / 32)[(TempX + 32) / 32].equals("1")){
+					
+					if(realX % 32 != 0){
+						realX = (realX + 32) / 32 * 32;
+					}else{
+						
+					}
+				}else{
+					realX = TempX;
+				}
+			}
 		}
 	}
 	
 	public void update(){
-
+		
+		map.realX = realX;
+		map.realY = realY;
 	}
 	
 	public void draw(Graphics g){
 		
-		g.drawImage(image, refX, refY, null);
 	}
 
 }
