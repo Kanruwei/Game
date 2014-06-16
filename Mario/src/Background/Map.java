@@ -55,11 +55,6 @@ public class Map {
 	public Graphics g_origin;
 	public Graphics g_originMix;
 	
-	public Map(MapManager mm){
-		
-		remote = mm;
-	}
-	
 	public void init(Sprite hero){
 		
 		this.hero = hero;
@@ -114,19 +109,12 @@ public class Map {
 		//create map, which will be rendered on the screen.
 		map = new BufferedImage(WIDTH_MAP, HEIGHT_MAP, BufferedImage.TYPE_INT_RGB);
 	}
-
-	public void keyPressed(int key){
-		
-		hero.keyPressed(key);
-	}
 	
 	public void update(){
 		
 	}
 	
 	public void draw(Graphics g){
-		
-		System.out.println("map draw>>");
 		
 		//draw origin
 		g_originMix.drawImage(origin, 0, 0, null);
@@ -145,11 +133,11 @@ public class Map {
 		
 		//define dy.
 		if(realY >= HEIGHT - (32 + (HEIGHT_MAP - 32) / 2)){
-			dy = WIDTH - (HEIGHT_MAP - 32) / 2;
+			dy = HEIGHT - HEIGHT_MAP;
 		}else if(realY <= (HEIGHT_MAP - 32) / 2){
 			dy = 0;
 		}else{
-			dy = realY - 408;
+			dy = realY - 304;
 		}
 		
 		//draw map.

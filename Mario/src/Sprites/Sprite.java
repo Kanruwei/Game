@@ -26,7 +26,9 @@ public class Sprite {
 	
 	public boolean falling = false;
 	public boolean jumping = false;
-	public boolean moving = false;
+	public boolean lefting = false;
+	public boolean righting = false;
+	public boolean standing = false;
 	
 	public int move_speed = 6;
 	public int jump_speed = 8;
@@ -51,41 +53,73 @@ public class Sprite {
 	}
 	
 	public void toLeft() {
+		
+		righting = false;
+		
+		TempX = realX - move_speed;
 
-		if (!falling) {
-			TempX = realX - move_speed;
+		if (TempX > 0) {
 
-			if (TempX > 0) {
+			if (matrix.get(realY / 32)[TempX / 32].equals("1")) {
 
-				if (matrix.get(realY / 32)[TempX / 32].equals("1")) {
+				realX = realX / 32 * 32;
+			} else {
 
-					realX = realX / 32 * 32;
-				} else {
-
-					realX = TempX;
-				}
+				realX = TempX;
+				lefting = true;
 			}
 		}
 	}
 	
 	public void toRight() {
+		
+		lefting = false;
+		
+		TempX = realX + move_speed;
 
-		if (!falling) {
-			TempX = realX + move_speed;
+		if (TempX < map.WIDTH - 32) {
 
-			if (TempX < map.WIDTH - 32) {
+			if (matrix.get(realY / 32)[(TempX + 32) / 32].equals("1")) {
 
-				if (matrix.get(realY / 32)[(TempX + 32) / 32].equals("1")) {
-
-					if (realX % 32 != 0) {
-						realX = (realX + 32) / 32 * 32;
-					} else {
-
-					}
+				if (realX % 32 != 0) {
+					realX = (realX + 32) / 32 * 32;
 				} else {
-					realX = TempX;
+					
 				}
+			} else {
+				realX = TempX;
+				
+				righting = true;
 			}
+		}
+	}
+
+	int steps = 20;
+	int num = 0;
+	public void isjump(){
+		
+		if(num >= steps){
+			
+			jumping = false;
+			num = 0;
+		}else{
+			
+			jumping = true;
+			
+			TempY = realY - jump_speed;
+			
+			if(TempY > 0){
+				
+				if(matrix.get(TempY / 32)[realX / 32].equals("1")){
+					
+					realY = realY / 32 * 32;
+					jumping = false;
+				}else{
+					realY = TempY;
+				}
+			num++;
+			}
+			
 		}
 	}
 	
@@ -93,13 +127,9 @@ public class Sprite {
 
 		TempY = realY + fall_speed;
 		
-		System.out.println("realY_row: " + realY / 32+ " TempY_row: " + TempY / 32);
-
 		if ((TempY + 32) < map.HEIGHT) {
-			System.out.println("size of matrix: " + matrix.size());
 			
 			if (matrix.get((TempY + 32) / 32)[realX / 32].equals("1")) {
-				System.out.println("next" + ((TempY + 32) / 32));
 				if(realY % 32 == 0){
 					
 				}else{
@@ -107,7 +137,6 @@ public class Sprite {
 				}
 				falling = false;
 			}else{
-				System.out.println("fall!");
 				realY = TempY;
 				falling = true;
 			}
@@ -119,17 +148,45 @@ public class Sprite {
 	
 	public void keyPressed(int key){
 		
+//		if(key == KeyEvent.VK_A){
+//			toLeft();
+//		}else if(key == KeyEvent.VK_D){
+//			toRight();
+//		}else if(key == KeyEvent.VK_W){
+//			isjump();
+//		}
+		
 		if(key == KeyEvent.VK_A){
-			toLeft();
-		}else if(key == KeyEvent.VK_D){
-			toRight();
+			System.out.println("pressed: " + "A");
 		}
 	}
 	
-	public void update(){
-
-		isfall();
+	public void keyReleased(int key) {
 		
+//		if(key == KeyEvent.VK_A){
+			System.out.println("released: " + "A");
+//		}
+	}
+	
+	public void KeyTyped(int key){
+		
+//		if(key == KeyEvent.VK_A){
+			System.out.println("typed: " + "A");
+//		}
+	}
+	
+	public void update() {
+		
+		if(!jumping){
+			isfall();
+		}
+
+		if (jumping) {
+			if (!falling) {
+				isjump();
+			}
+		}
+
 		map.realX = realX;
 		map.realY = realY;
 	}
