@@ -17,8 +17,11 @@ public class GamePanel extends JPanel implements KeyListener, Runnable{
 	public static int HEIGHT = 640;
 	
 	//Display
-	public int FPS = 50;
-	public int seconds = 1000 / FPS;
+	public static int FPS = 50;
+	public static int seconds = 1000 / FPS;
+	
+	public static int los = 0;
+	public static int already = 0;
 	
 	//Thread
 	public Thread thread;
@@ -88,12 +91,22 @@ public class GamePanel extends JPanel implements KeyListener, Runnable{
 	@Override
 	public void run() {
 		
+		los = 0;
+		already = 0;
+		
 		init();
 		
 		long startTime = 0;
 		long restTime = 0;
 		
 		while(running){
+			
+			if(already <= FPS){
+				already ++;
+			}else{
+				already = 1;
+				los = 0;
+			}
 			
 			startTime = System.nanoTime();
 			
@@ -104,7 +117,7 @@ public class GamePanel extends JPanel implements KeyListener, Runnable{
 			if(restTime / 1000000 < seconds){
 				render();
 			}else{
-				
+				los ++;
 			}
 		}
 	}

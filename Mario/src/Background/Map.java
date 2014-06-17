@@ -58,8 +58,6 @@ public class Map {
 	public Graphics g_originMix;
 	public Graphics g_map;
 	
-	public Font pause = new Font("Arial", Font.PLAIN, 20);
-	
 	public void init(Sprite hero){
 		
 		this.hero = hero;
@@ -152,11 +150,11 @@ public class Map {
 //		map = originMix.getSubimage(dx, dy, WIDTH_MAP, HEIGHT_MAP);
 		g_map.drawImage(originMix.getSubimage(dx, dy, WIDTH_MAP, HEIGHT_MAP), 0, 0, null);
 		
+		//FPS
+		g_map.drawString(GamePanel.los + "/" + GamePanel.FPS, 100, 50);
 		//draw pause in case pause
 		if(MapManager.pause){
-			
-			g_map.setColor(Color.RED);
-			g_map.setFont(pause);
+ 
 			g_map.drawString("Pasue", 100, 100);
 		}
 		
