@@ -20,6 +20,7 @@ public class frame {
 
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		
 		GamePanel panel = new GamePanel();

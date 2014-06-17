@@ -26,12 +26,15 @@ public class Sprite {
 	
 	public boolean falling = false;
 	public boolean jumping = false;
+	public boolean isjump = false;
 	public boolean lefting = false;
 	public boolean righting = false;
-	public boolean standing = false;
+	
+	public boolean direction_left = false;
+	public boolean direction_right = false;
 	
 	public int move_speed = 6;
-	public int jump_speed = 8;
+	public int jump_speed = 4;
 	public int fall_speed = 8;
 	
 	public Image image;
@@ -54,8 +57,6 @@ public class Sprite {
 	
 	public void toLeft() {
 		
-		righting = false;
-		
 		TempX = realX - move_speed;
 
 		if (TempX > 0) {
@@ -66,14 +67,11 @@ public class Sprite {
 			} else {
 
 				realX = TempX;
-				lefting = true;
 			}
 		}
 	}
 	
 	public void toRight() {
-		
-		lefting = false;
 		
 		TempX = realX + move_speed;
 
@@ -86,21 +84,25 @@ public class Sprite {
 				} else {
 					
 				}
+				righting = false;
 			} else {
 				realX = TempX;
-				
-				righting = true;
 			}
 		}
 	}
 
-	int steps = 20;
+	int steps = 32;
 	int num = 0;
-	public void isjump(){
+	public void toJump(){
+		
+		isjump = true;
+		//change move_speed
+		move_speed = 4;
 		
 		if(num >= steps){
-			
+			System.out.println("num: " + num);
 			jumping = false;
+			falling = true;
 			num = 0;
 		}else{
 			
@@ -113,13 +115,15 @@ public class Sprite {
 				if(matrix.get(TempY / 32)[realX / 32].equals("1")){
 					
 					realY = realY / 32 * 32;
+					num = 0;
 					jumping = false;
+					isjump = false;
+					falling = true;
 				}else{
 					realY = TempY;
 				}
 			num++;
 			}
-			
 		}
 	}
 	
@@ -136,6 +140,9 @@ public class Sprite {
 					realY = realY / 32 * 32 + 32;
 				}
 				falling = false;
+				isjump = false;
+				//move speed change.
+				move_speed = 6;
 			}else{
 				realY = TempY;
 				falling = true;
@@ -148,43 +155,69 @@ public class Sprite {
 	
 	public void keyPressed(int key){
 		
-//		if(key == KeyEvent.VK_A){
-//			toLeft();
-//		}else if(key == KeyEvent.VK_D){
-//			toRight();
-//		}else if(key == KeyEvent.VK_W){
-//			isjump();
-//		}
-		
-		if(key == KeyEvent.VK_A){
-			System.out.println("pressed: " + "A");
+		if (!falling && !isjump){
+			
+			if (key == KeyEvent.VK_A) {
+				if (!righting) {
+					lefting = true;
+					toLeft();
+				}
+			} else if (key == KeyEvent.VK_D) {
+				if (!lefting) {
+					righting = true;
+					toRight();
+				}
+			}
+
+			if (key == KeyEvent.VK_W) {
+				if (lefting) {
+					toJump();
+				} else if (righting) {
+					toJump();
+				} else {
+					toJump();
+				}
+			}
 		}
+		
 	}
 	
 	public void keyReleased(int key) {
-		
-//		if(key == KeyEvent.VK_A){
-			System.out.println("released: " + "A");
-//		}
+
+		if (!isjump) {
+
+			if (key == KeyEvent.VK_A) {
+				lefting = false;
+			}
+
+			if (key == KeyEvent.VK_D) {
+				righting = false;
+			}
+		}
 	}
 	
 	public void KeyTyped(int key){
 		
-//		if(key == KeyEvent.VK_A){
-			System.out.println("typed: " + "A");
-//		}
 	}
 	
 	public void update() {
 		
-		if(!jumping){
-			isfall();
-		}
-
-		if (jumping) {
-			if (!falling) {
-				isjump();
+		if (isjump) {
+			if (jumping) {
+				toJump();
+			}else{
+				isfall();
 			}
+			
+			if (isjump) {
+				if (lefting) {
+					toLeft();
+				} else if (righting) {
+					toRight();
+				}
+			} 
+		} else {
+			isfall();
 		}
 
 		map.realX = realX;
