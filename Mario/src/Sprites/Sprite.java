@@ -33,7 +33,7 @@ public class Sprite {
 	public boolean direction_left = false;
 	public boolean direction_right = false;
 	
-	public int move_speed = 6;
+	public int move_speed = 2;
 	public int jump_speed = 4;
 	public int fall_speed = 8;
 	
@@ -96,11 +96,9 @@ public class Sprite {
 	public void toJump(){
 		
 		isjump = true;
-		//change move_speed
 		move_speed = 4;
 		
 		if(num >= steps){
-			System.out.println("num: " + num);
 			jumping = false;
 			falling = true;
 			num = 0;
@@ -142,7 +140,7 @@ public class Sprite {
 				falling = false;
 				isjump = false;
 				//move speed change.
-				move_speed = 6;
+				move_speed = 2;
 			}else{
 				realY = TempY;
 				falling = true;
@@ -217,6 +215,12 @@ public class Sprite {
 				}
 			} 
 		} else {
+			
+			if(lefting){
+				toLeft();
+			}else if(righting){
+				toRight();
+			}
 			isfall();
 		}
 
