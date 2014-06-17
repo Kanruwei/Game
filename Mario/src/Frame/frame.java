@@ -13,7 +13,7 @@ public class frame {
 	public static void main(String args[]) {
 
 		// initialization
-		JFrame frame = new JFrame("Sample");
+		JFrame frame = new JFrame("Mario V1.0");
 		frame.setMaximumSize(new Dimension(WIDTH, HEIGHT));
 		frame.setMinimumSize(new Dimension(WIDTH, HEIGHT));
 		frame.setPreferredSize(new Dimension(WIDTH, HEIGHT));
