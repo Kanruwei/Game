@@ -8,6 +8,8 @@ import Sprites.Sprite;
 
 public class MapManager {
 	
+	public static boolean pause = false;
+	
 	public Map currentMap;
 	public Sprite hero;
 	

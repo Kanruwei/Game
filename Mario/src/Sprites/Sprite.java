@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 import Background.Map;
+import Background.MapManager;
 
 public class Sprite {
 	
@@ -153,31 +154,42 @@ public class Sprite {
 	
 	public void keyPressed(int key){
 		
-		if (!falling && !isjump){
+		if(key == KeyEvent.VK_SPACE){
 			
-			if (key == KeyEvent.VK_A) {
-				if (!righting) {
-					lefting = true;
-					toLeft();
-				}
-			} else if (key == KeyEvent.VK_D) {
-				if (!lefting) {
-					righting = true;
-					toRight();
-				}
-			}
-
-			if (key == KeyEvent.VK_W) {
-				if (lefting) {
-					toJump();
-				} else if (righting) {
-					toJump();
-				} else {
-					toJump();
-				}
+			if(!MapManager.pause){
+				MapManager.pause = true;
+			}else{
+				MapManager.pause = false;
 			}
 		}
 		
+		if (!MapManager.pause){
+			
+			if (!falling && !isjump){
+				
+				if (key == KeyEvent.VK_A) {
+					if (!righting) {
+						lefting = true;
+						toLeft();
+					}
+				} else if (key == KeyEvent.VK_D) {
+					if (!lefting) {
+						righting = true;
+						toRight();
+					}
+				}
+
+				if (key == KeyEvent.VK_W) {
+					if (lefting) {
+						toJump();
+					} else if (righting) {
+						toJump();
+					} else {
+						toJump();
+					}
+				}
+			}
+		}
 	}
 	
 	public void keyReleased(int key) {
@@ -200,32 +212,36 @@ public class Sprite {
 	
 	public void update() {
 		
-		if (isjump) {
-			if (jumping) {
-				toJump();
-			}else{
-				isfall();
-			}
+		if(!MapManager.pause){
 			
 			if (isjump) {
-				if (lefting) {
+				if (jumping) {
+					toJump();
+				}else{
+					isfall();
+				}
+				
+				if (isjump) {
+					if (lefting) {
+						toLeft();
+					} else if (righting) {
+						toRight();
+					}
+				} 
+			} else {
+				
+				if(lefting){
 					toLeft();
-				} else if (righting) {
+				}else if(righting){
 					toRight();
 				}
-			} 
-		} else {
-			
-			if(lefting){
-				toLeft();
-			}else if(righting){
-				toRight();
+				isfall();
 			}
-			isfall();
+
+			map.realX = realX;
+			map.realY = realY;
 		}
 
-		map.realX = realX;
-		map.realY = realY;
 	}
 	
 	public void draw(Graphics g){

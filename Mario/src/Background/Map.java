@@ -1,5 +1,7 @@
 package Background;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -54,6 +56,9 @@ public class Map {
 	
 	public Graphics g_origin;
 	public Graphics g_originMix;
+	public Graphics g_map;
+	
+	public Font pause = new Font("Arial", Font.PLAIN, 20);
 	
 	public void init(Sprite hero){
 		
@@ -108,6 +113,7 @@ public class Map {
 		
 		//create map, which will be rendered on the screen.
 		map = new BufferedImage(WIDTH_MAP, HEIGHT_MAP, BufferedImage.TYPE_INT_RGB);
+		g_map = map.createGraphics();
 	}
 	
 	public void update(){
@@ -121,6 +127,7 @@ public class Map {
 		
 		//draw hero
 		g_originMix.drawImage(hero_image, realX, realY, null);
+		
 		
 		//define dx.
 		if(realX < WIDTH / 4){
@@ -140,8 +147,18 @@ public class Map {
 			dy = realY - 304;
 		}
 		
+		
 		//draw map.
-		map = originMix.getSubimage(dx, dy, WIDTH_MAP, HEIGHT_MAP);
+//		map = originMix.getSubimage(dx, dy, WIDTH_MAP, HEIGHT_MAP);
+		g_map.drawImage(originMix.getSubimage(dx, dy, WIDTH_MAP, HEIGHT_MAP), 0, 0, null);
+		
+		//draw pause in case pause
+		if(MapManager.pause){
+			
+			g_map.setColor(Color.RED);
+			g_map.setFont(pause);
+			g_map.drawString("Pasue", 100, 100);
+		}
 		
 		g.drawImage(map, 0, 0, null);
 	}
