@@ -14,6 +14,8 @@ public class Npg {
 	public String path_image = "res/Sprites/frog.png";
 	public Image image;
 	
+	public int speed = 4;
+	
 	public int X;
 	public int Y;
 	
@@ -57,5 +59,6 @@ public class Npg {
 	
 	public void update(){
 		
+		patrol();
 	}
 }
