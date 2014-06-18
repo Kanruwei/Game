@@ -152,41 +152,29 @@ public class Sprite {
 		}
 	}
 	
-	public void keyPressed(int key){
-		
-		if(key == KeyEvent.VK_SPACE){
-			
-			if(!MapManager.pause){
-				MapManager.pause = true;
-			}else{
-				MapManager.pause = false;
-			}
-		}
-		
-		if (!MapManager.pause){
-			
-			if (!falling && !isjump){
-				
-				if (key == KeyEvent.VK_A) {
-					if (!righting) {
-						lefting = true;
-						toLeft();
-					}
-				} else if (key == KeyEvent.VK_D) {
-					if (!lefting) {
-						righting = true;
-						toRight();
-					}
-				}
+	public void keyPressed(int key) {
 
-				if (key == KeyEvent.VK_W) {
-					if (lefting) {
-						toJump();
-					} else if (righting) {
-						toJump();
-					} else {
-						toJump();
-					}
+		if (!falling && !isjump) {
+
+			if (key == KeyEvent.VK_A) {
+				if (!righting) {
+					lefting = true;
+					toLeft();
+				}
+			} else if (key == KeyEvent.VK_D) {
+				if (!lefting) {
+					righting = true;
+					toRight();
+				}
+			}
+
+			if (key == KeyEvent.VK_W) {
+				if (lefting) {
+					toJump();
+				} else if (righting) {
+					toJump();
+				} else {
+					toJump();
 				}
 			}
 		}
@@ -211,36 +199,33 @@ public class Sprite {
 	}
 	
 	public void update() {
-		
-		if(!MapManager.pause){
-			
-			if (isjump) {
-				if (jumping) {
-					toJump();
-				}else{
-					isfall();
-				}
-				
-				if (isjump) {
-					if (lefting) {
-						toLeft();
-					} else if (righting) {
-						toRight();
-					}
-				} 
+
+		if (isjump) {
+			if (jumping) {
+				toJump();
 			} else {
-				
-				if(lefting){
-					toLeft();
-				}else if(righting){
-					toRight();
-				}
 				isfall();
 			}
 
-			map.realX = realX;
-			map.realY = realY;
+			if (isjump) {
+				if (lefting) {
+					toLeft();
+				} else if (righting) {
+					toRight();
+				}
+			}
+		} else {
+
+			if (lefting) {
+				toLeft();
+			} else if (righting) {
+				toRight();
+			}
+			isfall();
 		}
+
+		map.realX = realX;
+		map.realY = realY;
 
 	}
 	

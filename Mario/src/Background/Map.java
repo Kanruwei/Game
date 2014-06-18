@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,13 +15,14 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import Enemy.Gruppe;
+import Enemy.Npg;
 import Frame.GamePanel;
 import Sprites.Sprite;
 
 
 public class Map {
 	
-	public MapManager remote;
 	public Sprite hero;
 	
 	//path of image and text file.
@@ -49,6 +51,12 @@ public class Map {
 	
 	public int realX = bornX;
 	public int realY = bornY;
+	
+	//gruppe of npgs
+	public Gruppe gruppe = new Gruppe();
+	
+	//location of npgs
+	public ArrayList<Point> Location_Npg = new ArrayList<Point>();
 	
 	public BufferedImage origin;
 	public BufferedImage originMix;
@@ -126,6 +134,8 @@ public class Map {
 		//draw hero
 		g_originMix.drawImage(hero_image, realX, realY, null);
 		
+		//draw ngps
+		gruppe.draw(g_originMix);
 		
 		//define dx.
 		if(realX < WIDTH / 4){
@@ -145,18 +155,11 @@ public class Map {
 			dy = realY - 304;
 		}
 		
-		
-		//draw map.
-//		map = originMix.getSubimage(dx, dy, WIDTH_MAP, HEIGHT_MAP);
+        //map = originMix.getSubimage(dx, dy, WIDTH_MAP, HEIGHT_MAP);
 		g_map.drawImage(originMix.getSubimage(dx, dy, WIDTH_MAP, HEIGHT_MAP), 0, 0, null);
 		
 		//FPS
 		g_map.drawString(GamePanel.los + "/" + GamePanel.FPS, 100, 50);
-		//draw pause in case pause
-		if(MapManager.pause){
- 
-			g_map.drawString("Pasue", 100, 100);
-		}
 		
 		g.drawImage(map, 0, 0, null);
 	}
