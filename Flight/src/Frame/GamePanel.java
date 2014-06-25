@@ -8,6 +8,8 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+import Background.Map;
+
 public class GamePanel extends JPanel implements Runnable, KeyListener{
 	
 	//Dimension
@@ -22,6 +24,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener{
 	public BufferedImage image;
 	public Graphics g;
 	
+	public Map map = new Map();
+	
 	
 	public GamePanel(){
 		
@@ -32,6 +36,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener{
 		//Initialization of BufferedImage
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		g = image.createGraphics();
+		
+		//Initialization of map
+//		map = new Map();
 	}
 	
 	public void addNotify(){
@@ -48,10 +55,12 @@ public class GamePanel extends JPanel implements Runnable, KeyListener{
 	
 	public void update(){
 		
+		map.update();
 	}
 	
 	public void draw(Graphics g){
 		
+		map.draw(g);
 	}
 	
 	public void render(){
@@ -62,10 +71,20 @@ public class GamePanel extends JPanel implements Runnable, KeyListener{
 	}
 
 	public void run() {
-		
-		update();
-		draw(g);
-		render();
+
+		while (running) {
+
+			update();
+			draw(g);
+			render();
+			
+			try {
+				Thread.sleep(20);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
 	}
 	
 	public void keyPressed(KeyEvent arg0) {

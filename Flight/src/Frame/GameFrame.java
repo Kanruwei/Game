@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 
 public class GameFrame extends JFrame{
 	
-	public static int WIDTH = 384;
+	public static int WIDTH = 800;
 	public static int HEIGHT = 640;
 	
 	public static JFrame frame;
