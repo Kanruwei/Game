@@ -18,6 +18,7 @@ public class Particle {
 	public Vector vGravity;
 
 	public boolean beCollision = false;
+	public String artCollision = null;
 	public Vector impactForce = new Vector(0.0, 0.0);
 
 	public Particle() {
@@ -37,8 +38,18 @@ public class Particle {
 		boolean hasCollision = false;
 
 		this.impactForce.clear();
-
-		n.setY(-1.0);
+		
+		//identify n
+		if (artCollision.equals("bottom")){
+			n.setY(-1.0);
+		}else if (artCollision.equals("right")){
+			n.setX(-1.0);
+		}else if (artCollision.equals("left")){
+			n.setX(1.0);
+		}else if (artCollision.equals("top")){
+			n.setY(1.0);
+		}
+		
 		vr = this.vVelocity;
 
 		vrn = vr.dot(n);
@@ -82,15 +93,19 @@ public class Particle {
 		// check the region
 		if (vPosition.getY() - radius <= 0) {
 			beCollision = true;
+			artCollision = "top";
 			vPosition.setY(radius);
 		} else if (vPosition.getY() + radius >= 640) {
 			beCollision = true;
+			artCollision = "bottom";
 			vPosition.setY(640 - radius);
 		} else if (vPosition.getX() - radius <= 0) {
 			beCollision = true;
+			artCollision = "left";
 			vPosition.setX(radius);
 		} else if (vPosition.getX() >= 800) {
 			beCollision = true;
+			artCollision = "right";
 			vPosition.setX(800 - radius);
 		}
 		
@@ -108,8 +123,6 @@ public class Particle {
 
 		g.fillOval((int) (this.vPosition.getX() - this.radius),
 				(int) (this.vPosition.getY() - this.radius), 32, 32);
-		
-		g.fillOval(100, (int) (640 - 2 * radius), 32, 32);
 	}
 
 }

@@ -1,5 +1,6 @@
 package Background;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
@@ -24,7 +25,12 @@ public class Map {
 	}
 
 	public void draw(Graphics g) {
-
+		
+		//draw black background
+//		g.setColor(Color.BLACK);
+//		g.fillRect(0, 0, 800, 640);
+		
+		g.setColor(Color.WHITE);
 		for (Particle i : gruppe) {
 			i.draw(g);
 		}
