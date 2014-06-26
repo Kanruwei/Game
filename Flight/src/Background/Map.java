@@ -27,8 +27,8 @@ public class Map {
 	public void draw(Graphics g) {
 		
 		//draw black background
-//		g.setColor(Color.BLACK);
-//		g.fillRect(0, 0, 800, 640);
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, 800, 640);
 		
 		g.setColor(Color.WHITE);
 		for (Particle i : gruppe) {
