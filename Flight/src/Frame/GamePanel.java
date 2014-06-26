@@ -13,8 +13,8 @@ import Background.Map;
 public class GamePanel extends JPanel implements Runnable, KeyListener{
 	
 	//Dimension
-	public int WIDTH = GameFrame.WIDTH;
-	public int HEIGHT = GameFrame.HEIGHT;
+	public int WIDTH = 800;
+	public int HEIGHT = 640;
 	
 	//Thread
 	public boolean running = false;
