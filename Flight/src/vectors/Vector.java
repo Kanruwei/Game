@@ -58,11 +58,33 @@ public class Vector {
 		return temp;
 	}
 	
+	public Vector divide(double mass){
+		
+		Vector temp = new Vector(this.getX() / mass, this.getY() / mass);
+		return temp;
+	}
+	
+	public Vector time(int value){
+		
+		Vector temp = new Vector(this.getX() * value, this.getY() * value);
+		return temp;
+	}
+	
 	public double[] getLocation(){
 		
 		double[] location = {x, y};
 		
 		return location;
+	}
+	
+	public void setX(double a){
+		
+		x = a;
+	}
+	
+	public void setY(double b){
+		
+		y = b;
 	}
 	
 	public double getX(){
@@ -73,5 +95,16 @@ public class Vector {
 	public double getY(){
 		
 		return y;
+	}
+	
+	public void clear(){
+		
+		this.setX(0.0);
+		this.setY(0.0);
+	}
+	
+	public void show(){
+		
+		System.out.println("X: " + this.getX() + " Y: " + this.getY());
 	}
 }

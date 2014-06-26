@@ -18,6 +18,9 @@ public class Map {
 
 	public void update() {
 
+		for (Particle i : gruppe) {
+			i.update();
+		}
 	}
 
 	public void draw(Graphics g) {
