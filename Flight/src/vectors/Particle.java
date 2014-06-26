@@ -26,7 +26,7 @@ public class Particle {
 		vGravity = new Vector(0.0, this.mass * _g );
 	}
 	
-	public void Collide(){
+	public void collision(){
 		
 		Vector n = new Vector(0.0, 0.0);
 		Vector vr = null;
@@ -41,21 +41,32 @@ public class Particle {
 		if (this.vPosition.getY() + 32 >= 640){
 			System.out.println("true");
 			
-			n.setY(1);
+			n.setY(-1.0);
+			n.show();
 			vr = this.vVelocity;
+			System.out.print("Vr: ");
+			vr.show();
+			
 			vrn = vr.dot(n);
+			System.out.println("vrn: " + vrn);
+			
+			if(vrn < 0){
+				vrn = -vrn;
+			}
 			
 			J = vrn * (_e + 1) * mass;
 			F = n;
-			F = F.divide(1);
+			F = F.time(J);
 			
 			this.vForce = this.vForce.plus(F);
 		}
 	}
 	
+	
 	public void caluloads(){
 		
 		this.vForce.clear();
+		this.collision();
 		this.vForce = this.vForce.plus(this.vGravity);
 	}
 	
@@ -77,7 +88,6 @@ public class Particle {
 	
 	public void update(){
 		
-		Collide();
 		caluloads();
 		updatebodyeuler();
 	}
