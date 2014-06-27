@@ -109,6 +109,50 @@ public class Particle {
 			n.setX(-1.0);
 		}
 
+		// check collision with particle
+		int index = 1;
+		double dis = 0.0;
+		double ddis = 0.0;
+
+		if (Gruppe.Gruppe.size() > 1) {
+			for (int i = 0; i < Gruppe.Gruppe.size(); i++) {
+				if (this.equals(Gruppe.Gruppe.get(i))) {
+					
+				} else {
+					if (distance(Gruppe.Gruppe.get(i)) <= (this.radius + Gruppe.Gruppe.get(i).radius)) {
+						dis = distance(Gruppe.Gruppe.get(i));
+						ddis = this.radius + Gruppe.Gruppe.get(i).radius - dis;
+						index = i;
+						
+						Particle object = Gruppe.Gruppe.get(i);
+						Vector n2 = new Vector(0.0, 0.0);
+						Vector vr2 = null;
+						double vrn2 = 0.0;
+						double J2;
+						Vector F2;
+						
+						n2.setX(this.vPosition.getX() - object.vPosition.getX());
+						n2.setY(this.vPosition.getY() - object.vPosition.getY());
+						n2 = n2.normalize();
+						
+						this.vPosition.setX(this.vPosition.getX() + n2.time(ddis).getX());
+						this.vPosition.setY(this.vPosition.getY() + n2.time(ddis).getY());
+						
+						vr2 = this.vVelocity.minus(object.vVelocity);
+						vrn2 = vr2.dot(n2);
+
+						if (vrn2 < 0) {
+							vrn2 = -vrn2;
+							J2 = vrn2 * (_e + 1) / (1/mass + 1/object.mass);
+							F2 = n2;
+							F2 = F2.time(J2);
+							vForce = vForce.plus(F2);
+						}
+					}
+				}
+			}
+		}
+
 		if (beCollision) {
 
 			vr = this.vVelocity;
@@ -129,6 +173,15 @@ public class Particle {
 			}
 			beCollision = false;
 		}
+	}
+
+	public double distance(Particle object) {
+
+		double distance = Math.sqrt(Math.pow(
+				(vPosition.getX() - object.vPosition.getX()), 2)
+				+ Math.pow((vPosition.getY() - object.vPosition.getY()), 2));
+		
+		return distance;
 	}
 
 	public void update() {
