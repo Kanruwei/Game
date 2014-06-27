@@ -22,7 +22,7 @@ public class Particle {
 	public Vector vGravity;
 
 	public boolean beCollision = false;
-	public String[] artCollision = {"a", "a", "a", "a"};
+	public boolean beSupport = false;
 	public Vector impactForce = new Vector(0.0, 0.0);
 	
 	public static ParticleGruppe Gruppe = new ParticleGruppe();
@@ -35,8 +35,8 @@ public class Particle {
 		vVelocity.setX(vx);
 		vVelocity.setY(vy);
 		
-		speed = this.vVelocity.magnitude();
-		vGravity = new Vector(0.0, this.mass * _g);
+		speed = vVelocity.magnitude();
+		vGravity = new Vector(0.0, mass * _g);
 		
 		Gruppe.add(this);
 	}
@@ -44,19 +44,21 @@ public class Particle {
 	public void caluForce() {
 		
 		// Gravity
-		this.vForce = this.vForce.plus(this.vGravity);
+		vForce = vForce.plus(vGravity);
+		System.out.print("vForce>>>");
+		this.vForce.show();
 
 		// air Drag
-		Vector vDrag;
-		double dDrag;
-
-		vDrag = new Vector(-vVelocity.getX(), -vVelocity.getY());
-		vDrag.normalize();
-
-		dDrag = 0.5 * _p * speed * speed * (radius * radius * 3.14159) * _cd;
-		vDrag = vDrag.time(dDrag);
-
-		this.vForce = this.vForce.plus(vDrag);
+//		Vector vDrag;
+//		double dDrag;
+//
+//		vDrag = new Vector(-vVelocity.getX(), -vVelocity.getY());
+//		vDrag.normalize();
+//
+//		dDrag = 0.5 * _p * speed * speed * (radius * radius * 3.14159) * _cd;
+//		vDrag = vDrag.time(dDrag);
+//
+//		this.vForce = this.vForce.plus(vDrag);
 
 	}
 
@@ -69,6 +71,9 @@ public class Particle {
 		a = this.vForce.divide(mass);
 		dv = a;
 		this.vVelocity = this.vVelocity.plus(dv);
+		
+		System.out.print("VY>>>");
+		System.out.println(a.getY());
 
 		ds = this.vVelocity.time(1);
 		this.vPosition = this.vPosition.plus(ds);
@@ -121,8 +126,13 @@ public class Particle {
 			J = vrn * (_e + 1) * mass;
 			F = n;
 			F = F.time(J);
-
-			this.vForce = this.vForce.plus(F);
+			
+			if(Math.abs(F.getY() + mass * _g) <= 0.5 || this.vVelocity.getY() == 0){
+				F.setY(-mass * _g);
+				vVelocity.setY(0.0);
+			}
+			
+			vForce = vForce.plus(F);
 			
 			beCollision = false;
 		}

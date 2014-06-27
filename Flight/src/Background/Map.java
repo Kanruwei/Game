@@ -11,7 +11,7 @@ public class Map {
 
 	public ParticleGruppe Gruppe = Particle.Gruppe;
 
-	public Particle a = new Particle(320, 160, 6.4, 0.0);
+	public Particle a = new Particle(320, 320, 6.4, 0.0);
 //	public Particle b = new Particle(480, 160, -6.4, 0.0);
 
 	public Map() {
