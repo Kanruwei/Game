@@ -1,13 +1,10 @@
 package vectors;
 
 import java.awt.Graphics;
-import java.util.ArrayList;
 
-//320 pixels equal 1 meter, 50 timestep equals 1 s.
+//320 pixels equal 1 meter, 50 time equals 1 s.
 
 public class Particle {
-
-	// public static ParticleGruppe gruppe = new ParticleGruppe();
 
 	public static double _g = 1.2544;
 	public static double _e = 0.9;
@@ -16,8 +13,8 @@ public class Particle {
 
 	public double mass = 10;
 
-	public Vector vPosition = new Vector(32, 300);
-	public Vector vVelocity = new Vector(6.4, 0);
+	public Vector vPosition = new Vector(0.0, 0.0);;
+	public Vector vVelocity = new Vector(0.0, 0.0);
 	public double speed;
 	public double radius = 16;
 
@@ -28,14 +25,24 @@ public class Particle {
 	public boolean fixY = false;
 	public String[] artCollision = { "a", "a", "a", "a", "a" };
 	public Vector impactForce = new Vector(0.0, 0.0);
+	
+	public static ParticleGruppe Gruppe = new ParticleGruppe();
 
-	public Particle() {
-
+	public Particle(double x , double y, double vx, double vy) {
+		
+		vPosition.setX(x);
+		vPosition.setY(y);
+		
+		vVelocity.setX(vx);
+		vVelocity.setY(vy);
+		
 		speed = this.vVelocity.magnitude();
 		vGravity = new Vector(0.0, this.mass * _g);
+		
+		Gruppe.add(this);
 	}
 
-	public void collision() {
+	public void checkCollision() {
 
 		Vector n = new Vector(0.0, 0.0);
 		Vector vr = null;
@@ -88,7 +95,7 @@ public class Particle {
 		beCollision = false;
 	}
 
-	public void caluloads() {
+	public void caluForce() {
 		
 		//check, whether the particle is loaded on the ground.
 		if(vForce.getY() == 0 && vVelocity.getY() == 0){
@@ -100,7 +107,7 @@ public class Particle {
 		this.vForce.clear();
 
 		if (beCollision) {
-			collision();
+			checkCollision();
 		}
 		// Gravity
 		this.vForce = this.vForce.plus(this.vGravity);
@@ -119,7 +126,7 @@ public class Particle {
 
 	}
 
-	public void updatebodyeuler() {
+	public void caluDistance() {
 
 		Vector a;
 		Vector dv;
@@ -155,12 +162,6 @@ public class Particle {
 
 		// speed set
 		this.speed = this.vVelocity.magnitude();
-	}
-
-	public void update() {
-
-		caluloads();
-		updatebodyeuler();
 	}
 
 	public void draw(Graphics g) {

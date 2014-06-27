@@ -5,23 +5,22 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import vectors.Particle;
+import vectors.ParticleGruppe;
 
 public class Map {
 
-	public ArrayList<Particle> gruppe = new ArrayList<Particle>();
+	public ParticleGruppe Gruppe = Particle.Gruppe;
 
-	public Particle a = new Particle();
+	public Particle a = new Particle(320, 160, 6.4, 0.0);
+	public Particle b = new Particle(480, 160, -6.4, 0.0);
 
 	public Map() {
 
-		gruppe.add(a);
 	}
 
 	public void update() {
 
-		for (Particle i : gruppe) {
-			i.update();
-		}
+		Gruppe.update();
 	}
 
 	public void draw(Graphics g) {
@@ -31,8 +30,6 @@ public class Map {
 		g.fillRect(0, 0, 800, 640);
 		
 		g.setColor(Color.WHITE);
-		for (Particle i : gruppe) {
-			i.draw(g);
-		}
+		Gruppe.draw(g);
 	}
 }
