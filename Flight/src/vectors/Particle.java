@@ -8,7 +8,7 @@ public class Particle {
 
 	public static double _g = 1.2544;
 	public static double _e = 0.9;
-	public static double _p = 30.3 / Math.pow(320, 3);
+	public static double _p = 1.23 / Math.pow(320, 3);
 	public static double _cd = 0.6;
 
 	public double mass = 10;
@@ -22,8 +22,7 @@ public class Particle {
 	public Vector vGravity;
 
 	public boolean beCollision = false;
-	public boolean fixY = false;
-	public String[] artCollision = { "a", "a", "a", "a", "a" };
+	public String[] artCollision = {"a", "a", "a", "a"};
 	public Vector impactForce = new Vector(0.0, 0.0);
 	
 	public static ParticleGruppe Gruppe = new ParticleGruppe();
@@ -42,73 +41,8 @@ public class Particle {
 		Gruppe.add(this);
 	}
 
-	public void checkCollision() {
-
-		Vector n = new Vector(0.0, 0.0);
-		Vector vr = null;
-		double vrn = 0.0;
-		double J;
-		Vector F;
-
-		impactForce.clear();
-
-		// identify n
-		if (artCollision[1].equals("bottom")) {
-			n.setY(-1.0);
-			artCollision[1] = "a";
-		} else if (artCollision[0].equals("top")) {
-			n.setY(1.0);
-			artCollision[0] = "a";
-		}
-
-		if (artCollision[3].equals("right")) {
-			n.setX(-1.0);
-			artCollision[3] = "a";
-		} else if (artCollision[2].equals("left")) {
-			n.setX(1.0);
-			artCollision[2] = "a";
-		}
-
-		vr = this.vVelocity;
-		vrn = vr.dot(n);
-
-		if (vrn < 0) {
-			vrn = -vrn;
-		}
-
-		J = vrn * (_e + 1) * mass;
-		F = n;
-		F = F.time(J);
-
-		// approximate of F
-		if (Math.abs(F.getY() + this.mass * _g) <= 1) {
-			F.setY(-12.544);
-			vVelocity.setY(0.0);
-		}
-		
-		if(fixY){
-			F.setY(-12.544);
-		}
-
-		this.vForce = this.vForce.plus(F);
-
-		beCollision = false;
-	}
-
 	public void caluForce() {
 		
-		//check, whether the particle is loaded on the ground.
-		if(vForce.getY() == 0 && vVelocity.getY() == 0){
-			fixY = true;
-		}else{
-			fixY = false;
-		}
-		
-		this.vForce.clear();
-
-		if (beCollision) {
-			checkCollision();
-		}
 		// Gravity
 		this.vForce = this.vForce.plus(this.vGravity);
 
@@ -139,29 +73,67 @@ public class Particle {
 		ds = this.vVelocity.time(1);
 		this.vPosition = this.vPosition.plus(ds);
 
+		// speed set
+		this.speed = this.vVelocity.magnitude();
+		
+		//clear all force
+		vForce.clear();
+	}
+	
+	public void checkCollision() {
+		
+		Vector n = new Vector(0.0, 0.0);
+		Vector vr = null;
+		double vrn = 0.0;
+		double J;
+		Vector F;
+		
 		// check the region
 		if (vPosition.getY() - radius <= 0) {
 			beCollision = true;
-			artCollision[0] = "top";
 			vPosition.setY(radius);
+			n.setY(1.0);
 		} else if (vPosition.getY() + radius >= 640) {
 			beCollision = true;
-			artCollision[1] = "bottom";
 			vPosition.setY(640 - radius);
+			n.setY(-1.0);
 		}
 
 		if (vPosition.getX() - radius <= 0) {
 			beCollision = true;
-			artCollision[2] = "left";
 			vPosition.setX(radius);
+			n.setX(1.0);
 		} else if (vPosition.getX() + radius >= 800) {
 			beCollision = true;
-			artCollision[3] = "right";
 			vPosition.setX(800 - radius);
+			n.setX(-1.0);
 		}
 
-		// speed set
-		this.speed = this.vVelocity.magnitude();
+		if (beCollision) {
+
+			vr = this.vVelocity;
+			vrn = vr.dot(n);
+
+			if (vrn < 0) {
+				vrn = -vrn;
+			}
+
+			J = vrn * (_e + 1) * mass;
+			F = n;
+			F = F.time(J);
+
+			this.vForce = this.vForce.plus(F);
+			
+			beCollision = false;
+		}
+
+	}
+	
+	public void update(){
+		
+		caluForce();
+		caluDistance();
+		checkCollision();
 	}
 
 	public void draw(Graphics g) {
