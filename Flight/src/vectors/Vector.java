@@ -28,10 +28,28 @@ public class Vector {
 
 	public double angle() {
 
-		double temp = Math.atan(y / x);
-		if (temp == -0.0) {
+		double temp = 0.0;
+
+		if (y == 0 && x == 0) {
+			System.out.println("Vector has no angle...");
+		} else if (y == 0 && x > 0) {
+			temp = Math.toRadians(0);
+		} else if (y > 0 && x == 0) {
+			temp = Math.toRadians(90);
+		} else if (y == 0 && x < 0) {
 			temp = Math.toRadians(180);
+		} else if (y < 0 && x == 0) {
+			temp = Math.toRadians(270);
+		} else if (x > 0 && y > 0) {
+			temp = Math.atan(y / x);
+		} else if (x < 0 && y > 0) {
+			temp = Math.toRadians(180 + Math.toDegrees(Math.atan(y / x)));
+		} else if (x < 0 && y < 0){
+			temp = Math.toRadians(180 + Math.toDegrees(Math.atan(y / x)));
+		}else if (x > 0 && y < 0){
+			temp = Math.toRadians(360 + Math.toDegrees(Math.atan(y / x)));
 		}
+
 		return temp;
 	}
 
